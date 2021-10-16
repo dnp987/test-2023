@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link rel="stylesheet" type ="text/css" href="../css/test-style.css">
+</head>
+<body>
+
+<h1>GTA Car test 2</h1>
+<div class = "div1">
+<table id = "test1" class = "table1">
+	<thead>
+		<tr>
+			<th>Year</th> <th>Make</th> 	<th>Model</th> 	<th>Price</th> <th>Stock #</th>
+  		</tr>
+  	</thead>
+  	<tbody id= "test2">
+ 	</tbody>
+</table>
+</div>
+<br>
+
+<!--  
+<button type="button" onclick="addRow()">Add</button>
+-->
+
+<script>
+addRow(200);
+function addRow(num) {
+	var table = document.getElementById("test2");
+	for (i= 0; i< num; i++){
+  		var row = table.insertRow(-1);
+  		var year = row.insertCell(0);
+  		var make = row.insertCell(1);
+  		var model = row.insertCell(2);
+  		var price = row.insertCell(3);
+  		var stocknum = row.insertCell(4);
+  		year.innerHTML = "Year " + i;
+  		make.innerHTML = "Make " + i;
+  		model.innerHTML = "Model " + i;
+  		price.innerHTML = "Price " + i;
+  		stocknum.innerHTML = "Stock # " + i;
+	}
+}
+</script>
+
+</body>
+</html>

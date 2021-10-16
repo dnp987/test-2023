@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>HTML server request test 1</title>
+</head>
+<body>
+<h1>This is a test</h1>
+<script>
+	var xhr = new XMLHttpRequest();
+	// request state change event
+	xhr.onreadystatechange = function() {
+
+	  // request completed?
+	  if (xhr.readyState !== 4) return;
+
+	  if (xhr.status === 200) {
+	    // request successful - show response
+	    console.log(xhr.responseText);
+	    var data = xhr.response.Text;
+	    for (i = 0; i <data.length; i++){
+	    	document.write('<h1>data[i]</h1>');
+	    }
+	  }
+	  else {
+	    // request error
+	    console.log('HTTP error', xhr.status, xhr.statusText);
+	  }
+	};
+
+	// start request
+	xhr.open('Get', 'http://home-pc:5000');
+	xhr.send(null);
+</script>
+</body>
+</html>

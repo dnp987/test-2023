@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- Use with form-test2.js -->
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Form test2</title>
+ <link rel="stylesheet" type ="text/css" href="../css/cars-style.css">
+</head>
+<body>
+	<h1>Cars form test2</h1>
+	<form action = "http://localhost:5000/action1"  method = "post"  accept-charset="utf-8">
+		<label for="low">Low price</label>
+		<input type ="text" id="low" name="low">
+		<label for="high">High price</label>
+		<input type ="text" id="high" name="high"><br><br>
+		<input type = "submit" value="Submit" />
+	</form>
+	
+<div id = "box1"></div>
+<div id = "box2"></div>
+<div id = "box3"></div>
+
+<script>
+	//1. Create a new XMLHttpRequest object
+	let xhr = new XMLHttpRequest();
+	var car_list = "";
+
+// 2. Configure it: GET-request for the URL /article/.../load
+	xhr.open('GET', 'http://home-pc:5000');
+// 3. Send the request over the network
+	xhr.send();
+// 4. This will be called after the response is received
+	xhr.onload = function() {
+ 	if (xhr.status != 200) { // analyze HTTP status of the response
+  		alert(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+  	} else { // show the data
+   		//document.getElementById('status1').innerHTML = `Received ${xhr.response.length} bytes`; 
+   		document.getElementById('box3').innerHTML = '<small>Received ' + xhr.response.length + ' bytes</small>';
+		var data = JSON.parse(xhr.responseText);
+		for (i = 0; i < data.length; i++){
+			car_list += '<p>'+ data[i].year +'  '+ data[i].make +'  '+data[i].model+'  '+data[i].price+'  '+ data[i].Name + '  ' + data[i].stock_num + '    ' + '<a href =' + data[i].URL + '  target = "_blank">' + data[i].make + '  '+ data[i].model + '    </a>'  + '</p>';
+		}
+		document.getElementById('box1').innerHTML = car_list;
+		document.getElementById('box2').innerHTML = "<small>" + data.length + " car(s) found</small>";
+ 	}
+	};
+	xhr.onerror = function() {
+  	alert("Request failed");
+	};
+</script>
+</body>
+</html>

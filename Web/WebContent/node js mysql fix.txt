@@ -1,0 +1,7 @@
+I faced the same issue. Here is how solved it. 
+    1. First created a proj dir e.g (Users/home/proj)
+    2. Go to then proj folder. 
+    3. Run npm init (this will create package.json). 
+    4. Run (npm install mysql) 
+    5. Check in proj folder, you should see node_modules folder, expand node_modules and you should see mysql folder. 
+    6. Run your app.js 

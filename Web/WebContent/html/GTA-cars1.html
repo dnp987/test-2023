@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- Use with form-test2.js -->
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Form test1</title>
+<link rel="stylesheet" type ="text/css" href="../css/cars-style.css"/>
+</head>
+<body>
+	<h1>This is a form test</h1>
+	<p class = "para1">GTA Used Car Prices</p>
+	<form name = "form1"  id = "form1" action = "http://localhost:5000/action1" method = "post" accept-charset="utf-8" target = 'frame1'>
+		<label for="low">Low price</label>
+		<input type ="number" id="low" name="low" min = "0" step = "500" required>
+		<label for="high">High price</label>
+		<input type ="number" id="high" name="high" min = "500" step = "500" required><br><br>
+		<input type = "submit" value="Submit" />
+	</form>
+	<br>
+	<div class = "data-container">
+		<iframe class = "data-frame1" name = 'frame1' width = '1000'  height = '1000'  title = 'frame1' ></iframe>
+	</div>
+	<!-- <script>
+		var cssLink = document.createElement("link");
+		cssLink.href = "../css/cars-style.css"; 
+		cssLink.rel = "stylesheet"; 
+		cssLink.type = "text/css"; 
+		frames['frame1'].document.head.appendChild(cssLink);
+	</script> -->
+	<div class = "footer">
+	This web site gathers used car sales data from new car dealers across the G.T.A. only and not from used car dealers or private sales. When there is no price available, the data is not included. 
+	</div>
+</body>
+</html>

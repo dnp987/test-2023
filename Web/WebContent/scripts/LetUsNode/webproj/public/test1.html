@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>GTA Used Cars</title>
+ <link rel="stylesheet" type ="text/css" rel ="stylesheet"  href="./css/cars-style.css">
+</head>
+<body>
+<h1>GTA Used Car Prices</h1>
+<small>This web site gets used car prices from new car dealers from around the GTA and <span>not</span> from used car dealers or private sales..</small>
+<br><br>
+	<form name = "form1"  id = "form1" action = "http://localhost:3000/action1" method = "post" accept-charset="utf-8" target = 'frame1'>
+		<label for="min">Min. price</label>
+		<input type ="number" min = "0" step = "500" id="min"  size = 7.5 name="min" required>
+		<label for="max">Max. price</label>
+		<input type ="number" min = "0" step = "500" id="max" size = 7.5 name="max" required>
+		<input type = "submit" value="Get Prices" />
+	</form>
+	<iframe name = 'frame1' title = 'frame1' ></iframe>
+</body>
+</html>

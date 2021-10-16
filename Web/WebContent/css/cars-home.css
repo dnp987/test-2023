@@ -1,0 +1,33 @@
+@charset "ISO-8859-1";
+
+body {
+	background: gray;
+	background-image: url('../images/gta.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
+}
+
+h1 {
+	font-family: arial;
+	color: white;
+	text-align: center;
+	vertical-align: top; 
+}
+	
+p {
+	color: white;
+  	font-size: 18px;
+  	font-family: arial;
+}
+
+.footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	color: white;
+	text-align: left;
+	font-size: 12px;
+	font-style: italic;
+}

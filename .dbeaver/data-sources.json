@@ -1,0 +1,45 @@
+{
+	"folders": {},
+	"connections": {
+		"mysql8-17c2fb48cbd-41b14cb38875ba49": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "carsdb",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "carsdb",
+				"url": "jdbc:mysql://localhost:3306/carsdb",
+				"home": "mysql_client",
+				"type": "dev",
+				"auth-model": "native",
+				"handlers": {
+					"mysql_ssl": {
+						"type": "CONFIG",
+						"enabled": true,
+						"save-password": true,
+						"properties": {
+							"ssl.public.key.retrieve": "true",
+							"ssl.verify.server": "false",
+							"ssl.method": "CERTIFICATES",
+							"ssl.require": "false"
+						}
+					}
+				}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"auto-close-transactions": false
+		}
+	}
+}

@@ -1,0 +1,56 @@
+This is pseudo code for stopping when the last page is reached
+																	1st pass			2nd pass		3rd pass
+																	current  next	current  next	current  next
+load page using spreadsheet URL			
+wait for the heading/title to load
+current_page = 1
+remaining_pages = true
+While remaining_pages:
+	next_page = next_page-href				1			 2			2			 3			3			2
+	if next_page < current_page				false				false				true - break
+		break
+	
+	next_page.click # get the next page
+	wait for the heading/title to load
+	current_page = next_page					2			2			3          3
+
+last_page = next_page																				last = 2
+
+for all pages:
+	get car desc
+	get car prices
+	process desc & prices
+	append desc & prices to list
+
+sort the list
+save the list to a spreadsheet file
+
+=================================================
+
+load page using spreadsheet URL
+wait for the heading/title to load
+current_page = 1
+next_page = next_page-href
+
+While next_page > current_page:
+	next_page.click #get the next page
+	wait for the heading/title to load
+	current_page = next_page
+	next_page = next_page-href
+
+last_page = next_page
+
+for all pages:
+	get car desc
+	get car prices
+	process desc & prices
+	append desc & prices to list
+
+sort the list
+save the list to a spreadsheet file
+
+==================================================================
+This is a good example of using selectors to find things, it's not so obvious 
+   '''car_year = driver.find_elements_by_css_selector("[itemprop = releaseDate")
+    car_make = driver.find_elements_by_css_selector("[itemprop = manufacturer")
+    car_model = driver.find_elements_by_css_selector("[itemprop = model") '''
