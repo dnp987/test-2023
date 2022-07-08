@@ -12,9 +12,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from Quotes.Excel_utils2 import Excel_utils2
 from Cars.CreateDealerSheet2 import CreateDealerSheet
 from Cars.browser_start import browser_start
+from Cars.car_data import CarData
 
 if __name__ == '__main__':
-    file_in = 'C:/Users/Home/Desktop/Cars/CarData.xlsx'
+    file_in = 'C:/Users/dpenn/Desktop/Cars/CarData.xlsx'
     data_in = Excel_utils2(file_in, 'Ford', 'in')
     file_out = data_in.sht.cell(2,7).value
     dealer = data_in.sht.cell(2,1).value
@@ -22,7 +23,7 @@ if __name__ == '__main__':
     dealer_id = (data_in.sht.cell(2,3).value).split() # convert to a list for use later
     date_time = datetime.now().strftime('%Y %B %d %I %M %p') # get the date and time
     data_out = Excel_utils2(' ', date_time, 'out') # set the spreadsheet tab to the dealer name
-    driver = browser_start(base_url, True) # run browser in headless mode
+    driver = browser_start(base_url, True) # run browser in headless mode if True
     #driver = browser_start(base_url, False) # run browser in headless mode
     #driver = browser_start(base_url) # run browser in non-headless, incognito mode
     wait = WebDriverWait(driver, 10)
@@ -55,7 +56,8 @@ if __name__ == '__main__':
         prices = driver.find_elements_by_tag_name('strong')
         stock = driver.find_elements_by_css_selector('div.w-full.text-center.font-light.text-sm.py-1.mt-2.md\:flex.md\:flex-wrap.md\:justify-center > div > p')
         details_links = driver.find_elements_by_css_selector('.mx-auto.flex [href]')
-                    
+        car_temp = []
+                            
         for index, car in enumerate(car_desc_raw):
             car_name = (car.text +" ").split()[:4] # keep the year, make, and model, remove the rest
             year = car_name[0].split() # convert the year to a list
@@ -70,6 +72,8 @@ if __name__ == '__main__':
             price = price.split() # convert to a list
             stock_num = (stock[index].text[8:]).split() # remove "Stock #:" and keep the stock #
             link = (details_links[index].get_attribute('href')).split()
+            car_temp2 = CarData(' '.join(dealer_id), car_name[0], car_name[1], ' '.join(car_name[2:4]), prices[index].text, stock[index].text[8:], details_links[index].get_attribute('href')  )
+            car_temp.append(car_temp2)
             print (index,":", car_desc, price, stock_num, link)
             car_info.append(dealer_id + car_desc + price + stock_num + link)
             count +=1
