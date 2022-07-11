@@ -57,12 +57,17 @@ if __name__ == '__main__':
         stock = driver.find_elements_by_css_selector('div.w-full.text-center.font-light.text-sm.py-1.mt-2.md\:flex.md\:flex-wrap.md\:justify-center > div > p')
         details_links = driver.find_elements_by_css_selector('.mx-auto.flex [href]')
         car_temp = []
-                            
+                           
         for index, car in enumerate(car_desc_raw):
+            car_temp2 = CarData
+            car_temp2.dealer_id = ' '.join(dealer_id)
             car_name = (car.text +" ").split()[:4] # keep the year, make, and model, remove the rest
             year = car_name[0].split() # convert the year to a list
+            car_temp2.year = car_name[0]
             make = car_name[1].split() # convert make to a list
+            car_temp2.make = car_name[1]
             model = car_name[2:] # model is already a list
+            car_temp2.model = ' '.join(car_name[2:4])
             model = [' '.join(model)] # merge the model into one list element
             car_desc = year + make + model
             price = re.sub("[$,]", "", prices[index].text) # remove $ and ',' from the price
@@ -70,9 +75,11 @@ if __name__ == '__main__':
                 price = '0'
                 zero += 1
             price = price.split() # convert to a list
+            car_temp2.price = prices[index].text
             stock_num = (stock[index].text[8:]).split() # remove "Stock #:" and keep the stock #
+            car_temp2.stock_num = stock[index].text[8:]
             link = (details_links[index].get_attribute('href')).split()
-            car_temp2 = CarData(' '.join(dealer_id), car_name[0], car_name[1], ' '.join(car_name[2:4]), prices[index].text, stock[index].text[8:], details_links[index].get_attribute('href')  )
+            car_temp2.link = details_links[index].get_attribute('href') 
             car_temp.append(car_temp2)
             print (index,":", car_desc, price, stock_num, link)
             car_info.append(dealer_id + car_desc + price + stock_num + link)
