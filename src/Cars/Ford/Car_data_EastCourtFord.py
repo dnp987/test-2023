@@ -69,7 +69,8 @@ if __name__ == '__main__':
             model = car_name[2:] # model is already a list
             car_temp2.model = ' '.join(car_name[2:4])
             model = [' '.join(model)] # merge the model into one list element
-            car_desc = year + make + model
+            #car_desc = year + make + model
+            car_desc = car_temp2.year + car_temp2.make + car_temp2.model
             price = re.sub("[$,]", "", prices[index].text) # remove $ and ',' from the price
             if (not price.isdigit()): # if the price is "Please call" or something non-numeric, set the price to 0
                 price = '0'
@@ -82,7 +83,8 @@ if __name__ == '__main__':
             car_temp2.link = details_links[index].get_attribute('href') 
             car_temp.append(car_temp2)
             print (index,":", car_desc, price, stock_num, link)
-            car_info.append(dealer_id + car_desc + price + stock_num + link)
+            #car_info.append(dealer_id + car_desc + price + stock_num + link)
+            car_info.append(car_temp2.dealer_id + car_desc +car_temp2. price + car_temp2.stock_num + car_temp2.link)
             count +=1
  
     print ("Total cars processed: ", count, " Total unpriced cars: ", zero)
