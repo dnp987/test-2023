@@ -25,7 +25,6 @@ if __name__ == '__main__':
     data_out = Excel_utils2(' ', date_time, 'out') # set the spreadsheet tab to the dealer name
     driver = browser_start(base_url, True) # run browser in headless mode if True
     #driver = browser_start(base_url, False) # run browser in headless mode
-    #driver = browser_start(base_url) # run browser in non-headless, incognito mode
     wait = WebDriverWait(driver, 10)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div.total-results-preview'))) # wait for number of cars to be displayed
     print (driver.title)
