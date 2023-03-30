@@ -28,13 +28,12 @@ if __name__ == '__main__':
     wait = WebDriverWait(driver, 10)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div.total-results-preview'))) # wait for number of cars to be displayed
     print (driver.title)
-    num_cars = driver.find_element_by_css_selector('div.total-results-preview').text
     #test1 = driver.find_element_by_css_selector('span.text-lg').text  #can also find number of car with this
-    num_cars = int(re.sub("[^0-9]", "", num_cars))
+    num_cars = int(re.sub("[^0-9]", '', driver.find_element(By.CSS_SELECTOR,'div.total-results-preview').text))
     print ("Number of cars found on site: " , num_cars)
     cars_per_page = 50
     num_pages = num_cars // cars_per_page
-    if num_cars % cars_per_page >0: # if the number of cars per page doesn't divide evenly into the total number of cars, we need one more page
+    if num_cars % cars_per_page >0: # if the number of cars per page doesn't divide evenly into the total number of cars, one more page is needed
         num_pages += 1
     count = 0
     zero = 0
@@ -50,11 +49,10 @@ if __name__ == '__main__':
             wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div.total-results-preview'))) # wait for number of cars to be displayed
             #sleep(4)
 
-        # car_desc_raw = driver.find_elements_by_css_selector('h3' '.text-black')
-        car_desc_raw = driver.find_elements_by_css_selector('h6' '.vehicle-title')
-        prices = driver.find_elements_by_tag_name('strong')
-        stock = driver.find_elements_by_css_selector('div.w-full.text-center.font-light.text-sm.py-1.mt-2.md\:flex.md\:flex-wrap.md\:justify-center > div > p')
-        details_links = driver.find_elements_by_css_selector('.mx-auto.flex [href]')
+        car_desc_raw = driver.find_elements(By.CSS_SELECTOR, 'h6' '.vehicle-title')
+        prices = driver.find_elements(By.TAG_NAME, 'strong')
+        stock = driver.find_elements(By.CSS_SELECTOR, 'div.w-full.text-center.font-light.text-sm.py-1.mt-2.md\:flex.md\:flex-wrap.md\:justify-center > div > p')
+        details_links = driver.find_elements(By.CSS_SELECTOR, '.mx-auto.flex [href]')
         car_temp = []
                            
         for index, car in enumerate(car_desc_raw):
@@ -98,3 +96,4 @@ if __name__ == '__main__':
     data_out.save_file(file_out)
        
     driver.quit() # Close the browser and end the session
+    
