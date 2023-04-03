@@ -35,7 +35,7 @@ if __name__ == '__main__':
     wait = WebDriverWait(driver, 10)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div.total-results-preview'))) # wait for number of cars to be displayed
     print (driver.title)
-    check_pop_up(driver)
+    check_pop_up(driver) # close annoying pop-up if it appears
     #test1 = driver.find_element_by_css_selector('span.text-lg').text  #can also find number of car with this
     num_cars = int(re.sub("[^0-9]", '', driver.find_element(By.CSS_SELECTOR,'div.total-results-preview').text))
     print ("Number of cars found on site: " , num_cars)
@@ -71,7 +71,7 @@ if __name__ == '__main__':
             count +=1
         # try to get the next page of data if the right arrow is there
         try:
-            check_pop_up(driver)
+            check_pop_up(driver) # close annoying pop-up if it appears
             wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'svg.right-arrow-svg')))
             next_page =  driver.find_element(By.CSS_SELECTOR, 'svg.right-arrow-svg')
             next_page.click()
