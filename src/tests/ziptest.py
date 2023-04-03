@@ -13,8 +13,9 @@ for index, (aa, bb,cc) in enumerate (zip(a, b, c)):
     
 
 x = 'x'
-while (x != 'xxx'):
+while (x == 'x'):
+    print ("x is 'x'")
     x = x + 'x'
-    pass
-
+    continue
+print ("x is no longer 'x'")
 print (x)
