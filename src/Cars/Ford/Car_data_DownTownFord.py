@@ -14,7 +14,7 @@ from Cars.CreateDealerSheet2 import CreateDealerSheet
 from Cars.browser_start import browser_start
 
 if __name__ == '__main__':
-    file_in = 'C:/Users/Home/Desktop/Cars/CarData.xlsx'
+    file_in = 'C:/Users/dpenn/Desktop/Cars/CarData.xlsx'
     data_in = Excel_utils2(file_in, 'Ford', 'in')
     file_out = data_in.sht.cell(4,7).value
     dealer = data_in.sht.cell(4,1).value
@@ -22,12 +22,12 @@ if __name__ == '__main__':
     dealer_id = (data_in.sht.cell(4,3).value).split() # convert to a list for use later
     date_time = datetime.now().strftime('%Y %B %d %I %M %p') # get the date and time
     data_out = Excel_utils2(' ', date_time, 'out') # set the spreadsheet tab to the dealer name
-    driver = browser_start(url, True) # run browser in headless mode
-    #driver = browser_start(url) # run browser in non-headless, incognito mode
+    #driver = browser_start(url, True) # run browser in headless mode
+    driver = browser_start(url) # run browser in non-headless, incognito mode
     wait = WebDriverWait(driver, 10)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'li.resetButtonItem'))) # wait for Reset button to be displayed
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-asset-name="Downtown Ford Logo Click For Homepage"]')))
     print (driver.title)
-    num_cars = driver.find_element_by_css_selector('div.count.verticalAlignMid.inlineBlock').text
+    num_cars = driver.find_element(By.CSS_SELECTOR, 'div.count.verticalAlignMid.inlineBlock').text
     num_cars = int(re.sub("[^0-9]", "", num_cars)) #remove text, keep the numeric part, and convert to integer for later use
     print ("Number of cars found on site: " , num_cars)
     
@@ -38,14 +38,14 @@ if __name__ == '__main__':
     while pages_remaining:
         
         try:
-            driver.find_element_by_css_selector('.popCloseButton').click() # close the annoying pop-up if it appears
+            driver.find_element(By.CSS_SELECTOR, '.popCloseButton').click() # close the annoying pop-up if it appears
         except:
             pass
         
-        car_desc = driver.find_elements_by_css_selector(".inventoryListVehicleTitle")
-        car_prices = driver.find_elements_by_css_selector('.vehiclePriceDisplay' '[itemprop]')
-        stock = driver.find_elements_by_css_selector('.field' '[itemprop = "sku"]')
-        details_links = driver.find_elements_by_css_selector('.inventoryListVehicleTitle [href]')
+        car_desc = driver.find_elements(By.CSS_SELECTOR, ".inventoryListVehicleTitle")
+        car_prices = driver.find_elements(By.CSS_SELECTOR, '.vehiclePriceDisplay' '[itemprop]')
+        stock = driver.find_elements(By.CSS_SELECTOR, '.field' '[itemprop = "sku"]')
+        details_links = driver.find_elements(By.CSS_SELECTOR, '.inventoryListVehicleTitle [href]')
         
         for index, car in enumerate(car_desc):
             car_name = (car.text +" ").split()[:4] # keep the year, make, and model, remove the rest
