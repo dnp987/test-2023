@@ -52,20 +52,21 @@ if __name__ == '__main__':
         prices = driver.find_elements(By.TAG_NAME, 'strong')
         stock = driver.find_elements(By.CSS_SELECTOR, 'div.w-full.text-center.font-light.text-sm.py-1.mt-2.md\:flex.md\:flex-wrap.md\:justify-center > div > p')
         details_links = driver.find_elements(By.CSS_SELECTOR, '.mx-auto.flex [href]')
-        for index, car in enumerate(car_desc_raw):
+
+        for index, (car, price, stk, links) in enumerate(zip(car_desc_raw, prices, stock, details_links)):
             car_name = (car.text +" ").split()[:4] # keep the year, make, and model, remove the rest
             year = car_name[0].split() # convert the year to a list
             make = car_name[1].split() # convert make to a list
             model = car_name[2:] # model is already a list
             model = [' '.join(model)] # merge the model into one list element
             car_desc = year + make + model
-            price = re.sub("[$,]", "", prices[index].text) # remove $ and ',' from the price
+            price = re.sub("[$,]", "", price.text) # remove $ and ',' from the price
             if (not price.isdigit()): # if the price is "Please call" or something non-numeric, set the price to 0
                 price = '0'
                 zero += 1
             price = price.split() # convert to a list
-            stock_num = (stock[index].text[8:]).split() # remove "Stock #:" and keep the stock #
-            link = (details_links[index].get_attribute('href')).split()
+            stock_num = stk.text[8:].split() # remove "Stock #:" and keep the stock #
+            link = links.get_attribute('href').split()
             print (index,":", car_desc, price, stock_num, link)
             car_info.append(dealer_id + car_desc + price + stock_num + link)
             count +=1
