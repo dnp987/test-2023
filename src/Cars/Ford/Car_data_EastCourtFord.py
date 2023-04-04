@@ -70,6 +70,7 @@ if __name__ == '__main__':
             print (index,":", car_desc, price, stock_num, link)
             car_info.append(dealer_id + car_desc + price + stock_num + link)
             count +=1
+            
         # try to get the next page of data if the right arrow is there
         try:
             check_pop_up(driver) # close annoying pop-up if it appears
