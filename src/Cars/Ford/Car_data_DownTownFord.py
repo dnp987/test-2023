@@ -5,7 +5,6 @@ Created on June 29, 2020
 from datetime import datetime
 from time import sleep
 import re
-#from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -22,12 +21,13 @@ if __name__ == '__main__':
     dealer_id = (data_in.sht.cell(4,3).value).split() # convert to a list for use later
     date_time = datetime.now().strftime('%Y %B %d %I %M %p') # get the date and time
     data_out = Excel_utils2(' ', date_time, 'out') # set the spreadsheet tab to the dealer name
-    #driver = browser_start(url, True) # run browser in headless mode
-    driver = browser_start(url) # run browser in non-headless, incognito mode
+    driver = browser_start(url, True) # run browser in headless mode
+    #driver = browser_start(url) # run browser in non-headless, incognito mode
     wait = WebDriverWait(driver, 10)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-asset-name="Downtown Ford Logo Click For Homepage"]')))
+    #wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '[data-asset-name="Downtown Ford Logo Click For Homepage"]')))
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'span.count')))
     print (driver.title)
-    num_cars = driver.find_element(By.CSS_SELECTOR, 'div.count.verticalAlignMid.inlineBlock').text
+    num_cars = driver.find_element(By.CSS_SELECTOR, 'span.count').text
     num_cars = int(re.sub("[^0-9]", "", num_cars)) #remove text, keep the numeric part, and convert to integer for later use
     print ("Number of cars found on site: " , num_cars)
     
@@ -44,7 +44,7 @@ if __name__ == '__main__':
         
         car_desc = driver.find_elements(By.CSS_SELECTOR, ".inventoryListVehicleTitle")
         car_prices = driver.find_elements(By.CSS_SELECTOR, '.vehiclePriceDisplay' '[itemprop]')
-        stock = driver.find_elements(By.CSS_SELECTOR, '.field' '[itemprop = "sku"]')
+        stock = driver.find_elements(By.CSS_SELECTOR, 'div.textboxContentWrapperInner em')
         details_links = driver.find_elements(By.CSS_SELECTOR, '.inventoryListVehicleTitle [href]')
         
         for index, car in enumerate(car_desc):
@@ -68,10 +68,10 @@ if __name__ == '__main__':
         print ("Running count: ", count)
           
         try:
-            print (driver.find_element_by_link_text("Next").get_attribute('href'))
-            driver.find_element_by_link_text("Next").click() # click on Next link
-            wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'li.resetButtonItem'))) # wait for Reset button to be displayed
-            sleep (4)
+            next_page = driver.find_element(By.LINK_TEXT, "Next")
+            print (next_page.get_attribute('href'))
+            next_page.click() # click on Next link
+            sleep (1)
         except:
             print ("Total cars processed: ", count, " Total unpriced cars: ", zero)
             pages_remaining = False
