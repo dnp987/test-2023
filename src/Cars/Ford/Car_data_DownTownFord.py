@@ -11,6 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from Quotes.Excel_utils2 import Excel_utils2
 from Cars.CreateDealerSheet2 import CreateDealerSheet
 from Cars.browser_start import browser_start
+from Cars.close_out import close_out
 
 if __name__ == '__main__':
     file_in = 'C:/Users/dpenn/Desktop/Cars/CarData.xlsx'
@@ -80,10 +81,11 @@ if __name__ == '__main__':
     for index, i in enumerate(car_info):
         print (index, ":", i)
         
-    print ("Saving data in a spreadsheet....", file_out)
-    CreateDealerSheet(data_out, car_info, date_time)
-    print (dealer, "Total cars: " , count)
-    data_out.save_file(file_out)
-       
-    driver.quit() # Close the browser and end the session
+    close_out(driver, dealer, count, num_cars, data_out, file_out, date_time, car_info)
+        
+    #print ("Saving data in a spreadsheet....", file_out)
+    #CreateDealerSheet(data_out, car_info, date_time)
+    #print (dealer, "Total cars: " , count)
+    #data_out.save_file(file_out)
+    #driver.quit() # Close the browser and end the session
     
