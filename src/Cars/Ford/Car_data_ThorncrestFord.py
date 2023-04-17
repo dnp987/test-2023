@@ -4,7 +4,6 @@
 from datetime import datetime
 from time import sleep
 import re
-#from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -13,7 +12,7 @@ from Cars.CreateDealerSheet2 import CreateDealerSheet
 from Cars.browser_start import browser_start
 
 if __name__ == '__main__':
-    file_in = 'C:/Users/Home/Desktop/Cars/CarData.xlsx'
+    file_in = 'C:/Users/dpenn/Desktop/Cars/CarData.xlsx'
     data_in = Excel_utils2(file_in, 'Ford', 'in')
     file_out = data_in.sht.cell(7,7).value
     dealer = data_in.sht.cell(7,1).value
@@ -21,20 +20,13 @@ if __name__ == '__main__':
     dealer_id = (data_in.sht.cell(7,3).value).split() # convert to a list for use later
     date_time = datetime.now().strftime('%Y %B %d %I %M %p') # get the date and time
     data_out = Excel_utils2(' ', date_time, 'out') # set the spreadsheet tab to the dealer name
-    
-    #headless = True
-    headless = False
+    headless = True
+    #headless = False
     driver = browser_start(base_url, headless) # run browser in headless mode
-    
-    wait = WebDriverWait(driver, 90)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.page-main-h1'))) # wait for USED VEHICLES to appear
+    wait = WebDriverWait(driver, 30)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.headline1'))) # wait for USED VEHICLES to appear
     print (driver.title)
-                   
-    #if headless: # believe it or not, there's a difference in how # of cars is found headless vs non-headless
-    #    num_cars = int(driver.find_elements_by_css_selector('.total-value')[0].text)
-    #else:
-    #   num_cars = int(driver.find_elements_by_css_selector('.total-value')[1].text)
-    num_cars = int(driver.find_elements_by_css_selector('.total-value')[1].text)   
+    num_cars = int(driver.find_elements(By.CSS_SELECTOR, 'span.inventory-listing-charlie__results-info-count')[1].text)
     print ("Number of cars found on site: " , num_cars)
     
     count = 0
@@ -43,26 +35,24 @@ if __name__ == '__main__':
   
     pages_remaining = True
     while pages_remaining:
-        car_desc = driver.find_elements_by_css_selector('.vehicle-title') # year, make, model
-        car_trim = driver.find_elements_by_css_selector('.vehicle-trim') # model trim/details
-        prices = driver.find_elements_by_css_selector('.sale-price') # prices
-        stock = driver.find_elements_by_css_selector('.stock-number') # stock #
-        details_links = driver.find_elements_by_css_selector('.view-details [href]')
-                
+        car_desc = driver.find_elements(By.CSS_SELECTOR, '.inventory-tile-section-vehicle-name--model-name') # model
+        years = driver.find_elements(By.CSS_SELECTOR, '.inventory-tile-section-vehicle-name--year-make') # year, make
+        prices = driver.find_elements(By.CSS_SELECTOR, 'span.price') # prices
+        stock = driver.find_elements(By.CSS_SELECTOR, '.inventory-tile-section-stock-number') # stock #
+        details_links = driver.find_elements(By.LINK_TEXT, 'See More') # links
+                        
         for index, car in enumerate(car_desc):
-            car_make = (car.text).split()
-            year = car_make[0].split() # convert year to a list
-            make = car_make[1].split() # convert make to a list
-            model = car_make[2:]
-            model = ' '.join(model) # convert to a string
-            xx = (car_trim[index].text).split(" ", 1)
-            
-            if len(xx) >1 and xx[1] == 'SPORT': # this dealer doesn't display Mazda Sport properly, has it backwards
-                    model = model , " ",  xx[1] , " " + xx[0]
-                    model = [''.join(model)] # merge the model into one list element
-            else:
-                model = model, '  ', (car_trim[index].text).split(" ", 1)[0]
-                model = [''.join(model)] # merge the model into one list element
+            model = car.text[:-9].split() # convert to a list
+            year = years[index].text[:4].split() # convert to a list
+            make = years[index].text[5:].split() # convert to a list
+            #xx = (car_trim[index].text).split(" ", 1)
+                       
+            #if len(xx) >1 and xx[1] == 'SPORT': # this dealer doesn't display Mazda Sport properly, has it backwards
+            #        model = model , " ",  xx[1] , " " + xx[0]
+            #        model = [''.join(model)] # merge the model into one list element
+            #else:
+            #    model = model, '  ', (car_trim[index].text).split(" ", 1)[0]
+            #    model = [''.join(model)] # merge the model into one list element
             
             car_details = year + make + model
             price = re.sub("[^0-9]", "", prices[index].text) #remove text and keep the numeric part
@@ -70,15 +60,15 @@ if __name__ == '__main__':
                 price = '0'
                 zero += 1
             price = price.split() # convert to a list
-            stock_num = (stock[index].text[8:]).split() # get the stock # for each car and convert to a list
-            link = (details_links[index].get_attribute('href')).split()
-            print (index,":", car_details, price, stock_num, link)
-            car_info.append(dealer_id + car_details + price + stock_num + link)
+            stock_num = (stock[index].text[7:]).split() # get the stock # for each car and convert to a list
+            link = (details_links[index].get_attribute('href'))
+            #print (index,":", car_details, price, stock_num, link)
+            #car_info.append(dealer_id + car_details + price + stock_num + link)
             count +=1
         print ("Running count: ", count)
             
         try:
-            driver.find_element_by_css_selector('.right-arrow-svg').click() # click on Right arrow to get to the next page unless we're at the last page, then it won't be there
+            driver.find_element(By.CSS_SELECTOR, '.right-arrow-svg').click() # click on Right arrow to get to the next page unless we're at the last page, then it won't be there
             wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".page-main-h1"))) # wait for USED VEHICLES to appear
             sleep (2)
         except:
