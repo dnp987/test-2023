@@ -15,8 +15,8 @@ b[1] ="red"
 print (b)
 
 t = (1234, 5678, 'hello')
-print (t[0])
-#t[1] = 777
+print (t[0], len(t))
+t[1] = 777
 print (t)
 
 set1 = {'apple', 'orange', 'banana'}

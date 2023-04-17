@@ -7,7 +7,10 @@ import re
  
 a = 'abc def ghi xyz'
 print (len(a), a)
-print (a[0:3])
+print ('*******')
+print (a[:-4])
+print(a[4:])
+print ('*******')
 b = a.split()
 print (len(b), b)
 for index, i in enumerate(a):
