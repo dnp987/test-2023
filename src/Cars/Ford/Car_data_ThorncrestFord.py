@@ -40,7 +40,8 @@ if __name__ == '__main__':
         prices = driver.find_elements(By.CSS_SELECTOR, '.inventory-tile-section-price-tabs-panel-item__total-financeLease>span.inventory-tile-section-price-tabs-panel-item__total-value>span.price') # prices
         stock = driver.find_elements(By.CSS_SELECTOR, '.inventory-tile-section-stock-number') # stock #
         details_links = driver.find_elements(By.LINK_TEXT, 'See More') # links
-                               
+        test1 = driver.find_elements(By.CSS_SELECTOR,  '[data-image-container] a') # another way to get the links
+                                   
         for index, (car, yr_mk, price, stk, links)  in enumerate(zip(car_desc, year_make, prices, stock,details_links)):
             model = [''.join(car.text)] # merge the model into one list element
             year = yr_mk.text[:4].split() # convert to a list
@@ -60,8 +61,8 @@ if __name__ == '__main__':
                 price = '0'
                 zero += 1
             price = price.split() # convert to a list
-            stock_num = (stock[index].text[7:]).split() # get the stock # for each car and convert to a list
-            link = (details_links[index].get_attribute('href')).split() # convert to a list
+            stock_num = (stk.text[7:]).split() # get the stock # for each car and convert to a list
+            link = (links.get_attribute('href')).split() # convert to a list
             print (index,":", car_details, price, stock_num, link)
             car_info.append(dealer_id + car_details + price + stock_num + link)
             count +=1
