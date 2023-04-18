@@ -8,8 +8,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from Quotes.Excel_utils2 import Excel_utils2
-from Cars.CreateDealerSheet2 import CreateDealerSheet
 from Cars.browser_start import browser_start
+from Cars.close_out import close_out
 
 if __name__ == '__main__':
     file_in = 'C:/Users/dpenn/Desktop/Cars/CarData.xlsx'
@@ -36,15 +36,15 @@ if __name__ == '__main__':
     pages_remaining = True
     while pages_remaining:
         car_desc = driver.find_elements(By.CSS_SELECTOR, '.inventory-tile-section-vehicle-name--model-name') # model
-        years = driver.find_elements(By.CSS_SELECTOR, '.inventory-tile-section-vehicle-name--year-make') # year, make
-        prices = driver.find_elements(By.CSS_SELECTOR, 'span.price') # prices
+        year_make = driver.find_elements(By.CSS_SELECTOR, '.inventory-tile-section-vehicle-name--year-make') # year, make
+        prices = driver.find_elements(By.CSS_SELECTOR, '.inventory-tile-section-price-tabs-panel-item__total-financeLease>span.inventory-tile-section-price-tabs-panel-item__total-value>span.price') # prices
         stock = driver.find_elements(By.CSS_SELECTOR, '.inventory-tile-section-stock-number') # stock #
         details_links = driver.find_elements(By.LINK_TEXT, 'See More') # links
-                        
-        for index, car in enumerate(car_desc):
-            model = car.text[:-9].split() # convert to a list
-            year = years[index].text[:4].split() # convert to a list
-            make = years[index].text[5:].split() # convert to a list
+                               
+        for index, (car, yr_mk, price, stk, links)  in enumerate(zip(car_desc, year_make, prices, stock,details_links)):
+            model = [''.join(car.text)] # merge the model into one list element
+            year = yr_mk.text[:4].split() # convert to a list
+            make = yr_mk.text[5:].split() # convert to a list
             #xx = (car_trim[index].text).split(" ", 1)
                        
             #if len(xx) >1 and xx[1] == 'SPORT': # this dealer doesn't display Mazda Sport properly, has it backwards
@@ -55,21 +55,21 @@ if __name__ == '__main__':
             #    model = [''.join(model)] # merge the model into one list element
             
             car_details = year + make + model
-            price = re.sub("[^0-9]", "", prices[index].text) #remove text and keep the numeric part
+            price = re.sub("[^0-9]", "", price.text[:-3]) #remove last .00 and text, keep the numeric part
             if len(price) == 0: # if the price is "Call for price" or something non-numeric, set the price to 0
                 price = '0'
                 zero += 1
             price = price.split() # convert to a list
             stock_num = (stock[index].text[7:]).split() # get the stock # for each car and convert to a list
-            link = (details_links[index].get_attribute('href'))
-            #print (index,":", car_details, price, stock_num, link)
-            #car_info.append(dealer_id + car_details + price + stock_num + link)
+            link = (details_links[index].get_attribute('href')).split() # convert to a list
+            print (index,":", car_details, price, stock_num, link)
+            car_info.append(dealer_id + car_details + price + stock_num + link)
             count +=1
         print ("Running count: ", count)
             
         try:
-            driver.find_element(By.CSS_SELECTOR, '.right-arrow-svg').click() # click on Right arrow to get to the next page unless we're at the last page, then it won't be there
-            wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".page-main-h1"))) # wait for USED VEHICLES to appear
+            driver.find_element(By.CSS_SELECTOR, '.simple-arrow-right').click() # click on Right arrow to get to the next page unless we're at the last page, then it won't be there
+            wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".headline1"))) # wait for USED VEHICLES to appear
             sleep (2)
         except:
             pages_remaining = False # right arrow isn't displayed, last page reached
@@ -79,10 +79,5 @@ if __name__ == '__main__':
     for index, i in enumerate(car_info):
         print (index, ":", i)
         
-    print ("Saving data in a spreadsheet....", file_out)
-    CreateDealerSheet(data_out, car_info, date_time)
-    print (dealer, "Total cars: " , count)
-    data_out.save_file(file_out)
-       
-    driver.quit() # Close the browser and end the session
+    close_out(driver, dealer, count, num_cars, data_out, file_out, date_time, car_info)
     
