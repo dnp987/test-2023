@@ -67,16 +67,5 @@ if __name__ == '__main__':
         stock_num = stock_num.split() # convert to a list
         car_info.append(dealer_id + car_desc + price + stock_num + link)
         
-    print ("Priced cars: ", count, "Unpriced cars: ", zero)
-
-    car_info = sorted(car_info)
-    for index, i in enumerate(car_info):
-        print (index, ":", i)
-        
-    close_out(driver, dealer, count, num_cars, data_out, file_out, date_time, car_info)
+    close_out(driver, dealer, count, zero, num_cars, data_out, file_out, date_time, car_info)
     
-    #print ("Saving data in a spreadsheet....", file_out)
-    #CreateDealerSheet(data_out, car_info, date_time)
-    #print (dealer, "Total cars: " , count+zero)
-    #data_out.save_file(file_out)
-    #driver.quit() # Close the browser and end the session

@@ -74,10 +74,4 @@ if __name__ == '__main__':
         wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".page-main-h1"))) # wait for total cars in stock label to be displayed
         #sleep (6)
 
-    print ("Total cars processed: ", count, " Total unpriced cars: ", zero)
-                
-    car_info = sorted(car_info)
-    for index, i in enumerate(car_info):
-        print (index, ":", i)
-    
-    close_out(driver, dealer, count, num_cars, data_out, file_out, date_time, car_info)
+    close_out(driver, dealer, count, zero, num_cars, data_out, file_out, date_time, car_info)

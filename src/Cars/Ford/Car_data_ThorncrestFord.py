@@ -74,11 +74,6 @@ if __name__ == '__main__':
             sleep (2)
         except:
             pages_remaining = False # right arrow isn't displayed, last page reached
-       
-    print ("Total cars processed: ", count, " Total unpriced cars: ", zero)
-    car_info = sorted(car_info)
-    for index, i in enumerate(car_info):
-        print (index, ":", i)
         
-    close_out(driver, dealer, count, num_cars, data_out, file_out, date_time, car_info)
+    close_out(driver, dealer, count, zero, num_cars, data_out, file_out, date_time, car_info)
     

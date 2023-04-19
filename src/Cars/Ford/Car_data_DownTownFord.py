@@ -71,20 +71,9 @@ if __name__ == '__main__':
             next_page = driver.find_element(By.LINK_TEXT, "Next")
             print (next_page.get_attribute('href'))
             next_page.click() # click on Next link
-            sleep (1)
+            sleep (2)
         except:
-            print ("Total cars processed: ", count, " Total unpriced cars: ", zero)
             pages_remaining = False
-            
-    car_info = sorted(car_info)
-    for index, i in enumerate(car_info):
-        print (index, ":", i)
         
-    close_out(driver, dealer, count, num_cars, data_out, file_out, date_time, car_info)
+    close_out(driver, dealer, count, zero, num_cars, data_out, file_out, date_time, car_info)
         
-    #print ("Saving data in a spreadsheet....", file_out)
-    #CreateDealerSheet(data_out, car_info, date_time)
-    #print (dealer, "Total cars: " , count)
-    #data_out.save_file(file_out)
-    #driver.quit() # Close the browser and end the session
-    

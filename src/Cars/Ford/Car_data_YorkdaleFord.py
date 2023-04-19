@@ -76,10 +76,5 @@ if __name__ == '__main__':
         print (index,":", car_details, price, stock_num, link)
         car_info.append(dealer_id + car_details + price + stock_num + link)
         count +=1
- 
-    print ("Total cars processed: ", count, " Total unpriced cars: ", zero)
-    car_info = sorted(car_info)
-    for index, i in enumerate(car_info):
-        print (index, ":", i)
         
-    close_out(driver, dealer, count, num_cars, data_out, file_out, date_time, car_info)
+    close_out(driver, dealer, count, zero, num_cars, data_out, file_out, date_time, car_info)
