@@ -2,7 +2,6 @@
 @author: DNP Enterprises Inc.
 '''
 from datetime import datetime
-from time import sleep
 import re
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -10,6 +9,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from Quotes.Excel_utils2 import Excel_utils2
 from Cars.CreateDealerSheet2 import CreateDealerSheet
 from Cars.browser_start import browser_start
+from Cars.Scroll_Browser import Scroll_Browser
+from Cars.close_out import close_out
 
 if __name__ == '__main__':
     file_in = 'C:/Users/dpenn/Desktop/Cars/CarData.xlsx'
@@ -35,63 +36,50 @@ if __name__ == '__main__':
     #    num_cars = int(driver.find_elements(By.CSS_SELECTOR, '.total-value')[1].text)
     
     print ("Number of cars found on site: " , num_cars)
-    
     count = 0
     zero = 0
     car_info = []
-  
+    
+    scroll_pause_time = 5 # scroll all the way down until all pages are loaded
     pages_remaining = True
     while pages_remaining:
-        car_desc = driver.find_elements(By.CSS_SELECTOR, '.vehicle-title') # year, make, model
-        car_trim = driver.find_elements(By.CSS_SELECTOR, '.vehicle-trim') # model trim/details
-        prices = driver.find_elements(By.CSS_SELECTOR, '.sale-price') # prices
-        stock = driver.find_elements(By.CSS_SELECTOR, '.stock-number') # stock #
-        details_links = driver.find_elements(By.CSS_SELECTOR, '.view-details [href]')
-                
-        for index, car in enumerate(car_desc):
-            car_make = (car.text).split()
-            year = car_make[0].split() # convert year to a list
-            make = car_make[1].split() # convert make to a list
-            model = car_make[2]
-            car_trim_temp = car_trim[index].text
-             
-            if "," in car_trim_temp:
-                car_trim_temp2 = car_trim_temp[0: car_trim_temp.index(",")] # remove commas in the car trim, since we don't care about what comes after the commas
-                model = model, " " , car_trim_temp2
-            else:
-                    model = model, " " , car_trim_temp
-                    
-            model = ''.join(model) # convert to a string
-            model = re.sub(' +', ' ',  model ) #remove extra spaces
-            model = [''.join(model)] # merge the model into one list element
-            car_details = year + make + model
-            price = re.sub("[^0-9]", "", prices[index].text) #remove text and keep the numeric part
-            if len(price) == 0: # if the price is "Call for price" or something non-numeric, set the price to 0
-                price = '0'
-                zero += 1
-            price = price.split() # convert to a list
-            stock_num = (stock[index].text[8:]).split() # get the stock # for each car and convert to a list
-            link = (details_links[index].get_attribute('href')).split()
-            print (index,":", car_details, price, stock_num, link)
-            car_info.append(dealer_id + car_details + price + stock_num + link)
-            count +=1
-        print ("Running count: ", count)
-            
+        Scroll_Browser(driver, scroll_pause_time)
         try:
-            driver.find_element(By.CSS_SELECTOR, '.right-arrow-svg').click() # click on Right arrow to get to the next page unless we're at the last page, then it won't be there
-            wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".page-main-h1"))) # wait for USED VEHICLES to appear
-            sleep (2)
+            driver.find_element(By.CSS_SELECTOR, '.lbx-load-more-btn-div').click() # click on the more button till it's gone, then all the cars are displayed
         except:
             pages_remaining = False
-       
+                
+    makes = driver.find_elements(By.CSS_SELECTOR, 'span.value__make') # make
+    models = driver.find_elements(By.CSS_SELECTOR, 'span.value__model') # model
+    trims = driver.find_elements(By.CSS_SELECTOR, 'span.value__trim') # trim
+    years = driver.find_elements(By.CSS_SELECTOR, 'span.value__year') # trim) # year
+    prices = driver.find_elements(By.CSS_SELECTOR, '.price__second') # prices
+    stocks = driver.find_elements(By.CSS_SELECTOR, '.value__stock>a') # stock #
+    details_links = driver.find_elements(By.CSS_SELECTOR, '.buttons__content>a') # links
+                
+    for index, (make, model, trim, year, price, stock, links) in enumerate(zip(makes, models, trims, years, prices, stocks, details_links)):
+        model_trim = model.text + " " + trim.text
+        model_trim = [' '.join(model_trim)] # merge into one list element
+        make = [''.join(make.text)]
+        year = [''.join(year.text)]
+        car_details = year + make + model_trim
+        
+        price = re.sub("[^0-9]", "", price.text) #remove text and keep the numeric part
+        if len(price) == 0: # if the price is "Call for price" or something non-numeric, set the price to 0
+            price = '0'
+            zero += 1
+        price = price.split() # convert to a list
+        
+        stock_num = (stock.text[8:]).split() # get the stock # for each car and convert to a list
+        link = (links.get_attribute('href')).split()
+        
+        print (index,":", car_details, price, stock_num, link)
+        car_info.append(dealer_id + car_details + price + stock_num + link)
+        count +=1
+ 
     print ("Total cars processed: ", count, " Total unpriced cars: ", zero)
     car_info = sorted(car_info)
     for index, i in enumerate(car_info):
         print (index, ":", i)
         
-    print ("Saving data in a spreadsheet....", file_out)
-    CreateDealerSheet(data_out, car_info, date_time)
-    print (dealer, "Total cars: " , count)
-    data_out.save_file(file_out)
-       
-    driver.quit() # Close the browser and end the session
+    close_out(driver, dealer, count, num_cars, data_out, file_out, date_time, car_info)

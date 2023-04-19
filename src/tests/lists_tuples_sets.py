@@ -16,9 +16,16 @@ print (b)
 
 t = (1234, 5678, 'hello')
 print (t[0], len(t))
-t[1] = 777
+#t[1] = 777
 print (t)
 
 set1 = {'apple', 'orange', 'banana'}
 print (set1)
 print ('grape' in set1)
+
+x = 'test'
+y = 'test2'
+z = x + " " + y
+print (x, y, z)
+xx = [' '.join(z)]
+print (xx)
