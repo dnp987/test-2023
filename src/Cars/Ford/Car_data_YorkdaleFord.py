@@ -22,8 +22,8 @@ if __name__ == '__main__':
     date_time = datetime.now().strftime('%Y %B %d %I %M %p') # get the date and time
     data_out = Excel_utils2(' ', date_time, 'out') # set the spreadsheet tab to the dealer name
 
-    headless = True
-    #headless = False
+    #headless = True
+    headless = False
     driver = browser_start(base_url, headless) # run browser in headless mode
     wait = WebDriverWait(driver, 10)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.text-4xl'))) # wait for USED VEHICLES to appear
@@ -46,6 +46,7 @@ if __name__ == '__main__':
         Scroll_Browser(driver, scroll_pause_time)
         try:
             driver.find_element(By.CSS_SELECTOR, '.lbx-load-more-btn-div').click() # click on the more button till it's gone, then all the cars are displayed
+            #driver.find_element(By.XPATH, '//*[@id="inventory"]/div/div[2]/div[2]/div/button').click() # this also works
         except:
             pages_remaining = False
                 
