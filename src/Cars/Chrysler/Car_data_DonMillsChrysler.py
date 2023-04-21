@@ -59,7 +59,7 @@ if __name__ == '__main__':
             model = car_desc[2:] # model is already a list
             model = [' '.join(model)] # merge the model into one list element
             car_desc = year + make + model
-    
+            
             price = car_prices[index].text
             price = price.strip('\n') # remove carriage return from price
             price= re.sub("[^0-9]", "", price) #remove text, keep the numeric part
