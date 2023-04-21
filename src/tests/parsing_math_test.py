@@ -36,12 +36,13 @@ v = re.sub("[^0-9]", "", w)
 print (w, v, len(v))
 
 x = 2
-y = 2
+y = 3
 print (x, y, "Floor divide, rounded down", x//y)
 print (x, y, "Modulus, remainder of division", x%y)
-
-if (x%y):
-    print ("x")
+z = y//x
+if (y%x):
+    z +=1
+print (z)
 
 print (type (a))
 print (type (x))
@@ -54,6 +55,9 @@ print (ascii('»')) #get the ascii of '»' right arrow for next page
 print ('\xbb')
 print (ascii('«')) #get the ascii of '«' left arrow for previous page
 print ('\xab')
+stop = 4
+for i in range(2, (stop+1)):
+    print (i)
 
 '''
 # this code finds all of the css properites of an element
